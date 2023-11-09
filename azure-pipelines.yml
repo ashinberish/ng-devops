@@ -58,7 +58,14 @@ stages:
         displayName: "Angular App Deploy"
         steps:
          
-          
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: "current"
+              downloadType: "single"
+              artifactName: "drop"
+              downloadPath: "$(Build.ArtifactStagingDirectory)"
+            displayName: "Download Artifact"
+             
           - task: PublishBuildArtifacts@1
             inputs:
               PathtoPublish: "$(Build.ArtifactStagingDirectory)"
