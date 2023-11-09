@@ -39,15 +39,18 @@ stages:
               command: custom
               customCommand: "run build"
             displayName: "Angular Build"
+            
+              
   - stage: Deploy
     dependsOn: Build
     jobs:
+ 
       - job: Deploy
         displayName: "Angular App Deploy"
         steps:
           - task: CopyFiles@2
             inputs:
-              SourceFolder: "$(Build.SourcesDirectory)/dist"
+              SourceFolder: "$(Build.SourcesDirectory)/ng-devops/dist"
               Contents: "**"
               TargetFolder: "$(Build.ArtifactStagingDirectory)"
               CleanTargetFolder: true
@@ -60,3 +63,12 @@ stages:
               ArtifactName: "drop"
               publishLocation: "Container"
             displayName: "Publish Artifact"
+
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: "AzureRM"
+              azureSubscription: "<Azure Subscription>"
+              appType: "webAppLinux"
+              WebAppName: "<Web App Name>"
+              packageForLinux: "$(Build.ArtifactStagingDirectory)/drop"
+            displayName: "Deploy to Azure App Service"
