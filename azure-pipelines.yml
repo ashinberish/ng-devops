@@ -39,7 +39,7 @@ stages:
               command: custom
               customCommand: "run build"
             displayName: "Angular Build"
-  -stage: Deploy
+  - stage: Deploy
     dependsOn: Build
     jobs:
       - job: Deploy
