@@ -81,7 +81,7 @@ stages:
   - stage: Staging
     displayName: 'Deploy to STAGING'
     dependsOn: Build
-    condition: manual
+    condition: succeeded()
     jobs:
       - deployment: DeploymentStaging
         pool:
@@ -103,7 +103,7 @@ stages:
   - stage: Production
     displayName: 'Deploy to PROD'
     dependsOn: Build
-    condition: manual
+    condition: succeeded()
     jobs:
       - deployment: DeploymentProduction
         pool:
