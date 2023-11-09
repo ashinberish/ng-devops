@@ -77,4 +77,3 @@ stages:
                   appType: 'webAppLinux'
                   appName: 'azure-test-pipeline-angular'
                   package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-                  runtimeStack: 'NODE|16-lts'
