@@ -57,7 +57,7 @@ stages:
             
               
   - stage: Development
-    displayName: 'Deploy to Development'
+    displayName: 'Deploy to DEV'
     dependsOn: Build
     condition: succeeded()
     jobs:
@@ -65,6 +65,50 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         environment: Development
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+
+              - task: AzureWebApp@1
+                displayName: 'Deploy App Service'
+                inputs:
+                  azureSubscription: 'Free Trial(b37b48a6-cd9c-4233-91a7-0d64561b3b8a)'
+                  appType: 'webAppLinux'
+                  appName: 'azure-test-pipeline-angular'
+                  package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+  
+  - stage: Staging
+    displayName: 'Deploy to STAGING'
+    dependsOn: Build
+    condition: manual
+    jobs:
+      - deployment: DeploymentStaging
+        pool:
+          vmImage: 'ubuntu-latest'
+        environment: Staging
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+
+              - task: AzureWebApp@1
+                displayName: 'Deploy App Service'
+                inputs:
+                  azureSubscription: 'Free Trial(b37b48a6-cd9c-4233-91a7-0d64561b3b8a)'
+                  appType: 'webAppLinux'
+                  appName: 'azure-test-pipeline-angular'
+                  package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+  
+  - stage: Production
+    displayName: 'Deploy to PROD'
+    dependsOn: Build
+    condition: manual
+    jobs:
+      - deployment: DeploymentProduction
+        pool:
+          vmImage: 'ubuntu-latest'
+        environment: Production
         strategy:
           runOnce:
             deploy:
