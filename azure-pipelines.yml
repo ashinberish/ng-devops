@@ -39,6 +39,15 @@ stages:
               command: custom
               customCommand: "run build"
             displayName: "Angular Build"
+
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: "$(Build.SourcesDirectory)/dist"
+              Contents: "**"
+              TargetFolder: "$(Build.ArtifactStagingDirectory)"
+              CleanTargetFolder: true
+              OverWrite: true
+            displayName: "Copy Files"
             
               
   - stage: Deploy
@@ -48,14 +57,7 @@ stages:
       - job: Deploy
         displayName: "Angular App Deploy"
         steps:
-          - task: CopyFiles@2
-            inputs:
-              SourceFolder: "$(Build.SourcesDirectory)/ng-devops/dist"
-              Contents: "**"
-              TargetFolder: "$(Build.ArtifactStagingDirectory)"
-              CleanTargetFolder: true
-              OverWrite: true
-            displayName: "Copy Files"
+         
           
           - task: PublishBuildArtifacts@1
             inputs:
