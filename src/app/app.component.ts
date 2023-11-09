@@ -11,5 +11,5 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'ng-devops';
-  version = '2.0';
+  version = '3.0';
 }
