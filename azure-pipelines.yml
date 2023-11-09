@@ -73,7 +73,7 @@ stages:
               - task: AzureWebApp@1
                 displayName: 'Deploy App Service'
                 inputs:
-                  azureSubscription: 'b37b48a6-cd9c-4233-91a7-0d64561b3b8a'
+                  azureSubscription: 'Free Trial(b37b48a6-cd9c-4233-91a7-0d64561b3b8a)'
                   appType: 'webAppLinux'
                   appName: 'ng devops'
                   package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
