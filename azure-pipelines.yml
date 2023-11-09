@@ -75,6 +75,6 @@ stages:
                 inputs:
                   azureSubscription: 'b37b48a6-cd9c-4233-91a7-0d64561b3b8a'
                   appType: 'webAppLinux'
-                  appName: 'ng devops'
+                  appName: 'azure-test-pipeline-angular'
                   package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
                   runtimeStack: 'NODE|16-lts'
