@@ -20,7 +20,7 @@ stages:
         steps:
           - task: NodeTool@0
             inputs:
-              versionSpec: "20.x"
+              versionSpec: "18.x"
             displayName: "Install Node.js"
 
           - task: Npm@1
@@ -56,29 +56,25 @@ stages:
               publishLocation: 'Container'
             
               
-  - stage: Deploy
+  - stage: Development
+    displayName: 'Deploy to Development'
     dependsOn: Build
+    condition: succeeded()
     jobs:
- 
-      - job: Deploy
-        displayName: "Angular App Deploy"
-        steps:
-         
-          - task: DownloadBuildArtifacts@0
-            inputs:
-              buildType: "current"
-              downloadType: "single"
-              artifactName: "drop"
-              downloadPath: "$(Build.ArtifactStagingDirectory)"
-            displayName: "Download Artifact"
-             
-          
+      - deployment: DeploymentDevelopment
+        pool:
+          vmImage: 'ubuntu-latest'
+        environment: Development
+        strategy:
+          runOnce:
+            deploy:
+              steps:
 
-          # - task: AzureRmWebAppDeployment@4
-          #   inputs:
-          #     ConnectionType: "AzureRM"
-          #     azureSubscription: "<Azure Subscription>"
-          #     appType: "webAppLinux"
-          #     WebAppName: "<Web App Name>"
-          #     packageForLinux: "$(Build.ArtifactStagingDirectory)/drop"
-          #   displayName: "Deploy to Azure App Service"
+              - task: AzureWebApp@1
+                displayName: 'Deploy App Service'
+                inputs:
+                  azureSubscription: 'Inform-your-subscription'
+                  appType: 'webAppLinux'
+                  appName: 'ng devops'
+                  package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+                  runtimeStack: 'NODE|16-lts'
