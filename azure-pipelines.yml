@@ -14,7 +14,7 @@ stages:
     
     jobs:
       - job: Build
-        displayName: "ng devops Build"
+        displayName: "Build"
         workspace:
           clean: all
         steps:
@@ -59,7 +59,7 @@ stages:
   - stage: Development
     displayName: 'Deploy to DEV'
     dependsOn: Build
-    condition: succeeded()
+    condition: eq(variables['Build.Reason'], 'Manual')
     jobs:
       - deployment: DeploymentDevelopment
         pool:
@@ -80,8 +80,8 @@ stages:
   
   - stage: Staging
     displayName: 'Deploy to STAGING'
-    dependsOn: Build
-    condition: succeeded()
+    dependsOn: Development
+    condition: eq(variables['Build.Reason'], 'Manual')
     jobs:
       - deployment: DeploymentStaging
         pool:
@@ -91,7 +91,6 @@ stages:
           runOnce:
             deploy:
               steps:
-
               - task: AzureWebApp@1
                 displayName: 'Deploy App Service'
                 inputs:
@@ -102,8 +101,8 @@ stages:
   
   - stage: Production
     displayName: 'Deploy to PROD'
-    dependsOn: Build
-    condition: succeeded()
+    dependsOn: Staging
+    condition: eq(variables['Build.Reason'], 'Manual')
     jobs:
       - deployment: DeploymentProduction
         pool:
