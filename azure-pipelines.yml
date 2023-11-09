@@ -6,11 +6,12 @@
 trigger:
 - master
 
+pool:
+  vmImage: ubuntu-latest
+
 stages:
   - stage: Build
-    pool:
-      vmImage: ubuntu-latest
-
+    
     jobs:
       - job: Build
         displayName: "ng devops Build"
@@ -38,3 +39,24 @@ stages:
               command: custom
               customCommand: "run build"
             displayName: "Angular Build"
+  -stage: Deploy
+    dependsOn: Build
+    jobs:
+      - job: Deploy
+        displayName: "Angular App Deploy"
+        steps:
+          - task: CopyFiles@2
+            inputs:
+              SourceFolder: "$(Build.SourcesDirectory)/dist"
+              Contents: "**"
+              TargetFolder: "$(Build.ArtifactStagingDirectory)"
+              CleanTargetFolder: true
+              OverWrite: true
+            displayName: "Copy Files"
+          
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+              ArtifactName: "drop"
+              publishLocation: "Container"
+            displayName: "Publish Artifact"
