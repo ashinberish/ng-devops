@@ -48,6 +48,13 @@ stages:
               CleanTargetFolder: true
               OverWrite: true
             displayName: "Copy Files"
+          
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+              ArtifactName: "drop"
+              publishLocation: "Container"
+            displayName: "Publish Artifact"
             
               
   - stage: Deploy
@@ -66,12 +73,7 @@ stages:
               downloadPath: "$(Build.ArtifactStagingDirectory)"
             displayName: "Download Artifact"
              
-          - task: PublishBuildArtifacts@1
-            inputs:
-              PathtoPublish: "$(Build.ArtifactStagingDirectory)"
-              ArtifactName: "drop"
-              publishLocation: "Container"
-            displayName: "Publish Artifact"
+          
 
           # - task: AzureRmWebAppDeployment@4
           #   inputs:
