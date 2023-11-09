@@ -19,22 +19,22 @@ stages:
         steps:
           - task: NodeTool@0
             inputs:
-              versionSpec: "16.x"
+              versionSpec: "20.x"
             displayName: "Install Node.js"
 
           - task: Npm@1
             inputs:
               command: "install"
-            displayName: "NPM Install"
+            displayName: "Node Install"
           
           - task: Npm@1
             inputs:
               command: custom
               customCommand: "run tsc"
-            displayName: "TSC"
+            displayName: "Type Check"
           
           - task: Npm@1
             inputs:
               command: custom
               customCommand: "run build"
-            displayName: "ng build"
+            displayName: "Angular Build"
